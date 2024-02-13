@@ -4,7 +4,7 @@ class Settings {
         this.platform = "WEB";
         if(this.root.AcWingOS) this.platform = "ACAPP";
         this.username = "";
-        this.phtot = "";
+        this.photo = "";
 
         this.$settings = $(`
 <div class="ac-game-settings">
