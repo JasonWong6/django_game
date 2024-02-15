@@ -145,7 +145,7 @@ class Player extends AcGameObject {
         let fireball = new FireBall(this.playground, this, x, y, radius, vx, vy, color, speed, move_length, 0.01);
         this.fireballs.push(fireball);
 
-        this.fireball_coldtime = 3;
+        this.fireball_coldtime = 0.1;
 
         return fireball;
     }
@@ -225,8 +225,16 @@ class Player extends AcGameObject {
             this.update_coldtime();
         }
 
-        this.update_move(); 
+        this.update_move();
+        this.update_win();
         this.render();
+    }
+
+    update_win() {
+        if (this.playground.state === "fighting" && this.role === "me" && this.playground.players.length === 1) {
+            this.playground.state = "over";
+            this.playground.score_board.win();
+        }
     }
 
     update_coldtime() {
@@ -334,7 +342,10 @@ class Player extends AcGameObject {
 
     on_destroy() {
         if (this.role === "me") {
-            this.playground.state = "over";
+            if (this.playground.state === "fighting") {
+                this.playground.state = "over";
+                this.playground.score_board.lose();
+            }
         }
         for(let i = 0;i < this.playground.players.length;i ++) {
             if(this.playground.players[i] === this) {
